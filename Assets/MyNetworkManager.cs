@@ -5,9 +5,6 @@ using UnityEngine.Networking;
 
 public class MyNetworkManager : NetworkManager {
 
-	private bool connected = false;
-	private bool waiting = false;
-
 	public void MyStartHost(){
 		Debug.Log (Time.timeSinceLevelLoad + " : Starting Host. ");
 		StartHost (); 
@@ -19,22 +16,15 @@ public class MyNetworkManager : NetworkManager {
 
 	public override void OnStartClient(NetworkClient myClient){
 		Debug.Log (Time.timeSinceLevelLoad + " : Client start requested.");
-		waiting = true;
-	}
-
-	void Update (){
-		if (waiting && !connected) {
-			InvokeRepeating ("Waiting", 1f, 1f);
-		}
+		InvokeRepeating ("PrintDots", 0f, 1f);
 	}
 
 	public override void OnClientConnect(NetworkConnection conn){
-		connected = true;
-		waiting = false;
 		Debug.Log (Time.timeSinceLevelLoad + " : Client is connected at IP: " + conn.address);
+		CancelInvoke ();
 	}
 
-	void Waiting(){
-		print (". ");
+	void PrintDots(){
+		print (".");
 	}
 }
