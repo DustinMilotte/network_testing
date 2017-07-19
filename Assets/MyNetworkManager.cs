@@ -5,8 +5,10 @@ using UnityEngine.Networking;
 
 public class MyNetworkManager : NetworkManager {
 
+	private bool connected = false;
+
 	public void MyStartHost(){
-		Debug.Log (Time.timeSinceLevelLoad + "Starting Host. ");
+		Debug.Log (Time.timeSinceLevelLoad + " : Starting Host. ");
 		StartHost (); 
 	}
 
@@ -18,7 +20,18 @@ public class MyNetworkManager : NetworkManager {
 		Debug.Log (Time.timeSinceLevelLoad + " : Client start requested.");
 	}
 
+	void Update (){
+		if (!connected) {
+			InvokeRepeating ("Waiting", 1f, 1f);
+		}
+	}
+
 	public override void OnClientConnect(NetworkConnection conn){
+		connected = true;
 		Debug.Log (Time.timeSinceLevelLoad + " : Client is connected at IP: " + conn.address);
+	}
+
+	void Waiting(){
+		print (". ");
 	}
 }
